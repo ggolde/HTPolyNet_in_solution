@@ -1,0 +1,38 @@
+; Flexible tip3p water for use in HTPolyNet ./lib/molecules/parameterized
+; File manually written by Griffin, based on the parameters in gaff.dat from ambertools and tip3p.itp from amber99sb.ff
+;
+
+[ defaults ]
+; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ
+1               2               yes             0.5          0.83333333  
+
+#include "SOL.itp"
+
+[ moleculetype ]
+; Name            nrexcl
+SOL          2
+
+[ atoms ]
+;   nr       type  resnr residue  atom   cgnr    charge       mass  typeB    chargeB      massB
+; residue    1 SOL rtp SOL q -0.0
+    1         ow      1    SOL     OW      1 -0.8340000  16.000000
+    2         hw      1    SOL     HW1     2 0.41700000   1.008000
+    3         hw      1    SOL     HW2     3 0.41700000   1.008000
+
+[ bonds ]
+;    ai     aj funct         c0         c1         c2         c3
+      1      2     1
+      1      3     1
+      2      3     1
+
+[ angles ]
+;    ai     aj     ak funct         c0         c1         c2         c3
+      2      1      3     1
+
+[ system ]
+; Name
+Generic title
+
+[ molecules ]
+; Compound       #mols
+SOL                  1

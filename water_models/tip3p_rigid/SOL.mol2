@@ -1,0 +1,14 @@
+@<TRIPOS>MOLECULE
+SOL
+ 3 2 0 0 0
+SMALL
+GASTEIGER
+
+@<TRIPOS>ATOM
+      1 OW          0.0000    0.0000       0.0000 ow      1  SOL        -0.8340
+      2 HW1         0.075695  0.05858823   0.0000 hw      1  SOL         0.4170
+      3 HW2        -0.075695  0.05858823   0.0000 hw      1  SOL         0.4170
+@<TRIPOS>BOND
+     1     1     2    1
+     2     1     3    1
+     3     2     3    1

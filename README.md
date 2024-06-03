@@ -1,4 +1,18 @@
-# HTPolyNet
+# HTPolyNet In Water
+Thank you to the Abrams Group for making the base HTPolyNet package. I have modified how HTPolyNet (version 1.0.9) reads and merges .top file to make it compatible for simulating polymerizations in water.
+
+## Installation
+From source:
+```bash
+git clone git@github.com:ggolde/HTPolyNet_in_solution.git
+cd HTPolyNet_in_solution
+pip install -e .
+```
+
+## Guide to Including Water in Simulated Polymerizations
+Set up your HTPolyNet project as normal (as if there was no water) then run the 'htpolynet parameterize' command. From this repository's water_models folder, copy the files from your desired water model into './lib/molecules/parameterized.' In the projects .yaml file add SOL in the constituents directive along with how many water molecules you want in the system. Now you should be ready to run the polymerization.
+
+# HTPolyNet (original README)
 > High-Throughput Polymer Network Atomistic Simulations
 
 HTPolyNet is a Python utility for generating atomistic models of cross-linked polymer networks together with appropriate topology and parameter files required for molecular dynamics simulations using Gromacs.  It is intended as a fully automated system builder requiring as inputs only the molecular structures of any monomer species, a description of the polymerization chemistry, and a handful of options describing desired system size and composition.  HTPolyNet uses the Generalized Amber Force Field for atom-typing and parameter generation.

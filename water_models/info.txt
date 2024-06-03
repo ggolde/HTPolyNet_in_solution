@@ -1,0 +1,2 @@
+This folder cotains the parameterized water files for use in './lib/molecules/parameterized.' Currently the only water model included is tip3p.
+This version of HTPolyNet still does not support #ifdef statements in .top or .itp files so HTPolyNet can only be run with exclusivly flexible or exclusivly rigid water models.

@@ -78,7 +78,8 @@ def typedata(h,s):
 
 _GromacsExtensiveDirectives_=['atoms','pairs','bonds','angles','dihedrals']
 _NonGromacsExtensiveDirectives_=['mol2_bonds']
-_GromacsTopologyDirectiveOrder_=['defaults','atomtypes','bondtypes','angletypes','dihedraltypes','moleculetype','atoms','pairs','bonds','angles','dihedrals','system','molecules']
+# 'settles' and 'exclusions' added below (Griffin)
+_GromacsTopologyDirectiveOrder_=['defaults','atomtypes','bondtypes','angletypes','dihedraltypes','moleculetype','atoms','pairs','bonds','angles','dihedrals', 'settles', 'exclusions','system','molecules']
 _GromacsTopologyDirectiveHeaders_={
     'atoms':['nr', 'type', 'resnr', 'residue', 'atom', 'cgnr', 'charge', 'mass','typeB', 'chargeB', 'massB'],
     'pairs':['ai', 'aj', 'funct', 'c0', 'c1'],
@@ -90,6 +91,9 @@ _GromacsTopologyDirectiveHeaders_={
     'bondtypes':['i','j','func','b0','kb'],
     'angletypes':['i','j','k','func','th0','cth','rub','kub'],
     'dihedraltypes':['i','j','k','l','func','phase','kd','pn'],
+    # added 'settles' and 'exclusions' below (Griffin)
+    'settles':['ai', 'func', 'doh', 'dhh'],
+    'exclusions':['ai', 'aj', 'ak'],
     'system':['Name'],
     'molecules':['Compound','#mols'],
     'defaults':['nbfunc','comb-rule','gen-pairs','fudgeLJ','fudgeQQ']
@@ -104,7 +108,10 @@ _GromacsTopologyHashables_={ # attributes/columns that should always have values
     'atomtypes':['name'],
     'bondtypes':['i','j'],
     'angletypes':['i','j','k'],
-    'dihedraltypes':['i','j','k','l']
+    'dihedraltypes':['i','j','k','l'],
+    # added 'settles' and 'exclusions' below (Griffin)
+    'settles':['ai', 'func', 'doh', 'dhh'],
+    'exclusions':['ai', 'aj', 'ak']
 }
 
 _GromacsTopologyDirectiveDefaults_={
@@ -781,10 +788,13 @@ class Topology:
     def _myconcat(self,other,directive='',idxlabel=[],idxshift=0,drop_duplicates=False):
         if not directive in other.D:
             return
+        # added elif below and moved atom index shift outside the 'if directive in self.D:' (Griffin)
+        elif other.D[directive].empty:
+            return
+        # shift atom indices
+        for i in idxlabel:
+            other.D[directive][i]+=idxshift
         if directive in self.D:
-            # shift atom indices
-            for i in idxlabel:
-                other.D[directive][i]+=idxshift
             if drop_duplicates:
                 self.D[directive]=pd.concat((self.D[directive],other.D[directive]),ignore_index=True).drop_duplicates()
             else:
@@ -1002,6 +1012,9 @@ class Topology:
         self._myconcat(other,directive='pairs',idxlabel=['ai','aj'],idxshift=idxshift)
         self._myconcat(other,directive='angles',idxlabel=['ai','aj','ak'],idxshift=idxshift)
         self._myconcat(other,directive='dihedrals',idxlabel=['ai','aj','ak','al'],idxshift=idxshift)
+        # added below two lines (Griffin)
+        self._myconcat(other,directive='settles',idxlabel=['ai'],idxshift=idxshift)
+        self._myconcat(other,directive='exclusions',idxlabel=['ai', 'aj', 'ak'],idxshift=idxshift)
         logger.debug(f'merging {len(other.rings)} rings into base list of {len(self.rings)} with idxshift {idxshift}')
         other.rings.shift(idxshift)
         self.rings.extend(other.rings)
